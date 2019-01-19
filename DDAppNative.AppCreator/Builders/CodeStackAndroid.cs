@@ -17,6 +17,7 @@ namespace DDAppNative.AppCreator.Builders
         {
             var variables = new Dictionary<string, string> {
                 { "{{APP_CODE}}", state.AppCode },
+                { "{{DISPLAY_NAME}}", state.DisplayName },
                 { "{{SERVICE_HOST}}", state.ServiceHost },
                 { "{{BUILD_NUMBER}}", state.BuildNumber },
                 { "{{APP_VERSION}}", state.AppVersion },
