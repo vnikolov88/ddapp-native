@@ -28,6 +28,7 @@ namespace DDAppNative.AppCreator
 
             var appBuildState = new AppBuildState {
                 AppCode = appCode,
+                DisplayName = appSettings.AppDisplayName,
                 ServiceHost = appSettings.AppHostBaseUrl,
                 AppVersion = appSettings.AppVersion,
                 BundleIdentifier = appSettings.BundleIdentifier
