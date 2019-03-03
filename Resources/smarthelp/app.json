@@ -1,5 +1,5 @@
 {
-	"AppVersion": "1.1",
-	"BundleIdentifier": "com.jeute.doctorhelp.ddapp.ddz",
+	"AppVersion": "1.0",
+	"BundleIdentifier": "com.jeute.doctorhelp.ddapp.smarthelp",
 	"AppHostBaseUrl": "http://ddapp.doctor-help.com"
 }
