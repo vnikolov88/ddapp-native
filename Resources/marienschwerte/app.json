@@ -1,0 +1,6 @@
+{
+	"AppVersion": "2.0",
+	"BundleIdentifier": "com.jeute.doctorhelp.ddapp.marienschwerte",
+	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
+	"AppDisplayName": "Marien-SOS"
+}
