@@ -10,7 +10,8 @@ In the folder place the necessary resources, and define the app.json
 {
 	"AppVersion": "1.0",
 	"BundleIdentifier": "com.example.appname",
-	"AppHostBaseUrl": "http://ddapp.doctor-help.com"
+	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
+	"AppDisplayName": "Example App"
 }
 ```
 
