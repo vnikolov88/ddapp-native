@@ -79,25 +79,32 @@ namespace DDAppNative.AppCreator
 
         public static byte[] ReplaceBytes(byte[] src, byte[] search, byte[] repl)
         {
-            int index = FindBytes(src, search);
-            if (index >= 0)
+            int index;
+            byte[] result = src;
+            do
             {
-                var dst = new byte[src.Length - search.Length + repl.Length];
-                // before found array
-                Buffer.BlockCopy(src, 0, dst, 0, index);
-                // repl copy
-                Buffer.BlockCopy(repl, 0, dst, index, repl.Length);
-                // rest of src array
-                Buffer.BlockCopy(
-                    src,
-                    index + search.Length,
-                    dst,
-                    index + repl.Length,
-                    src.Length - (index + search.Length));
+                index = FindBytes(result, search);
+                if (index >= 0)
+                {
+                    var dst = new byte[result.Length - search.Length + repl.Length];
+                    // before found array
+                    Buffer.BlockCopy(result, 0, dst, 0, index);
+                    // repl copy
+                    Buffer.BlockCopy(repl, 0, dst, index, repl.Length);
+                    // rest of src array
+                    Buffer.BlockCopy(
+                        result,
+                        index + search.Length,
+                        dst,
+                        index + repl.Length,
+                        result.Length - (index + search.Length));
 
-                return dst;
+                    result = dst;
+                }
             }
-            return src;
+            while (index >= 0);
+
+            return result;
         }
     }
 }

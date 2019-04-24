@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,10 +24,10 @@ namespace DDAppNative.AppCreator.Builders
             var appResourceDir = $"{_resourcesBaseDir}/{state.AppCode}";
             var appDrawableDir = $"{appBuildBaseDir}/Android/Resources/drawable";
 
-            var resourcePackage = new ResourceDefinition[]
+            var resourcePackage = new ImageResourceDefinition[]
             {
                 // Drawable
-                new ResourceDefinition{ Source = $"{appResourceDir}/40x40.png",      Destination = $"{appDrawableDir}/icon.png" },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_s.png",      Destination = $"{appDrawableDir}/icon.png", Width = 40, Height = 40 },
             };
 
             var missingResources = resourcePackage.Where(x => !FileUtils.PathExists(x.Source))
@@ -34,7 +36,14 @@ namespace DDAppNative.AppCreator.Builders
             foreach (var resource in missingResources) Console.WriteLine(resource);
 
             foreach (var resource in resourcePackage)
-                FileUtils.CopyFile(resource.Source, resource.Destination);
+            {
+                using (var image = Image.Load(resource.Source))
+                {
+                    image.Mutate(x => x
+                         .Resize(resource.Width, resource.Height));
+                    image.Save(resource.Destination);
+                }
+            }
         }
     }
 }
