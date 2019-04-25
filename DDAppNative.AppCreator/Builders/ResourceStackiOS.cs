@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace DDAppNative.AppCreator.Builders
 {
@@ -24,31 +26,25 @@ namespace DDAppNative.AppCreator.Builders
             var launchImageDir = $"{appBuildBaseDir}/iOS/Resources/Media.xcassets/LaunchImage.imageset";
             var launchImagesDir = $"{appBuildBaseDir}/iOS/Resources/Media.xcassets/LaunchImages.launchimage";
 
-            var resourcePackage = new ResourceDefinition[]
+            var resourcePackage = new ImageResourceDefinition[]
             {
                 // AppIcons
-                new ResourceDefinition{ Source = $"{appResourceDir}/29x29.png",      Destination = $"{appIconsDir}/29x29.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/40x40.png",      Destination = $"{appIconsDir}/40x40.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/40x40.png",      Destination = $"{appIconsDir}/40x401.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/40x40.png",      Destination = $"{appIconsDir}/40x402.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/58x58.png",      Destination = $"{appIconsDir}/58x58.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/58x58.png",      Destination = $"{appIconsDir}/58x581.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/76x76.png",      Destination = $"{appIconsDir}/76x76.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/80x80.png",      Destination = $"{appIconsDir}/80x80.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/80x80.png",      Destination = $"{appIconsDir}/80x801.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/114x114.png",    Destination = $"{appIconsDir}/114x114.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/120x120.png",    Destination = $"{appIconsDir}/120x120.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/120x120.png",    Destination = $"{appIconsDir}/120x1201.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/152x152.png",    Destination = $"{appIconsDir}/152x152.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/1024x1024.png",  Destination = $"{appIconsDir}/1024x1024.png" },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_s.png",  Destination = $"{appIconsDir}/29x29.png", Width = 29, Height = 29 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_s.png",  Destination = $"{appIconsDir}/40x40.png", Width = 40, Height = 40 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_s.png",  Destination = $"{appIconsDir}/58x58.png", Width = 58, Height = 58 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_l.png",  Destination = $"{appIconsDir}/76x76.png", Width = 76, Height = 76 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_l.png",  Destination = $"{appIconsDir}/80x80.png", Width = 80, Height = 80 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_l.png",  Destination = $"{appIconsDir}/114x114.png", Width = 114, Height = 114 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_l.png",  Destination = $"{appIconsDir}/120x120.png", Width = 120, Height = 120 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_l.png",  Destination = $"{appIconsDir}/152x152.png", Width = 152, Height = 152 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_l.png",  Destination = $"{appIconsDir}/167x167.png", Width = 167, Height = 167 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/icon_l.png",  Destination = $"{appIconsDir}/1024x1024.png", Width = 1024, Height = 1024 },
                 // LaunchImage
-                new ResourceDefinition{ Source = $"{appResourceDir}/Splash_Screen_640x1136.png",  Destination = $"{launchImageDir}/Splash_Screen_640x1136.png" },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/splash_screen_l.png",  Destination = $"{launchImageDir}/Splash_Screen_640x1136.png", Width = 640, Height = 1136 },
                 // LaunchImages
-                new ResourceDefinition{ Source = $"{appResourceDir}/Splash_Screen_320x480.png",   Destination = $"{launchImagesDir}/Splash_Screen_320x480.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/Splash_Screen_640x960.png",   Destination = $"{launchImagesDir}/Splash_Screen_640x960.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/Splash_Screen_640x1136.png",  Destination = $"{launchImagesDir}/Splash_Screen_640x1136.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/Splash_Screen_640x9601.png",  Destination = $"{launchImagesDir}/Splash_Screen_640x9601.png" },
-                new ResourceDefinition{ Source = $"{appResourceDir}/Splash_Screen_640x1136.png",  Destination = $"{launchImagesDir}/Splash_Screen_640x11361.png" },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/splash_screen_s.png",  Destination = $"{launchImagesDir}/Splash_Screen_320x480.png", Width = 320, Height = 480 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/splash_screen_l.png",  Destination = $"{launchImagesDir}/Splash_Screen_640x960.png", Width = 640, Height = 960 },
+                new ImageResourceDefinition{ Source = $"{appResourceDir}/splash_screen_l.png",  Destination = $"{launchImagesDir}/Splash_Screen_640x1136.png", Width = 640, Height = 1136 },
             };
 
             var missingResources = resourcePackage.Where(x => !FileUtils.PathExists(x.Source))
@@ -56,8 +52,14 @@ namespace DDAppNative.AppCreator.Builders
 
             foreach (var resource in missingResources) Console.WriteLine(resource);
 
-            foreach (var resource in resourcePackage)
-                FileUtils.CopyFile(resource.Source, resource.Destination);
+            foreach (var resource in resourcePackage) {
+                using (var image = Image.Load(resource.Source))
+                {
+                    image.Mutate(x => x
+                         .Resize(resource.Width, resource.Height));
+                    image.Save(resource.Destination);
+                }
+            }
         }
     }
 }

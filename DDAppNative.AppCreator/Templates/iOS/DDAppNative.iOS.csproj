@@ -52,12 +52,12 @@
     <ConsolePause>false</ConsolePause>
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer: Veselin Nikolov (QNW88VKD7T)</CodesignKey>
-    <IpaPackageName>com.jeute.doctorhelp</IpaPackageName>
+    <IpaPackageName>{{BUNDLE_IDENTIFIER}}</IpaPackageName>
     <CodesignEntitlements>
     </CodesignEntitlements>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <CodesignProvision>VS: com.jeute.doctorhelp.ddapp.ddz Development</CodesignProvision>
+    <CodesignProvision>VS: {{BUNDLE_IDENTIFIER}} Development</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
     <BuildIpa>true</BuildIpa>
@@ -138,25 +138,10 @@
     <Compile Include="Native_iOS.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\152x1521.png">
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\152x152.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\167x1671.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\29x291.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40x403.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40x404.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\58x582.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\80x802.png">
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\167x167.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
@@ -180,11 +165,6 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\120x1201.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\29x29.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -195,22 +175,7 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40x401.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40x402.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\58x58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\58x581.png">
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
@@ -221,11 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\80x80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\80x801.png">
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
@@ -245,17 +205,7 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Splash_Screen_640x11361.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Splash_Screen_640x960.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Splash_Screen_640x9601.png">
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
