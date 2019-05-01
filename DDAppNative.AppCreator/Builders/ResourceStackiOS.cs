@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace DDAppNative.AppCreator.Builders
@@ -52,12 +54,15 @@ namespace DDAppNative.AppCreator.Builders
 
             foreach (var resource in missingResources) Console.WriteLine(resource);
 
+            var encoder = new PngEncoder();
+            encoder.ColorType = PngColorType.Rgb;
+
             foreach (var resource in resourcePackage) {
                 using (var image = Image.Load(resource.Source))
                 {
                     image.Mutate(x => x
                          .Resize(resource.Width, resource.Height));
-                    image.Save(resource.Destination);
+                    image.Save(resource.Destination, encoder);
                 }
             }
         }
