@@ -33,6 +33,12 @@
 	</array>
 	<key>CFBundleDisplayName</key>
 	<string>{{DISPLAY_NAME}}</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need permission to use your location to provide you accurate emergency data</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need permission to use your location to provide you accurate emergency data</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need permission to use your location to provide you accurate emergency data</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

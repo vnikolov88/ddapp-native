@@ -47,7 +47,7 @@ namespace DDAppNative.Common
             }
         }
 
-        public async Task SendAndUpdateAsync(string url, IHttpResponse response)
+        public async Task SendAndUpdateAsync(string url, IHttpResponse response, CancellationToken cancellationToken)
         {
             var fileName = $"Caches{url.GetGUID()}";
             var filePath = $"{baseDir}/{fileName}";
@@ -65,7 +65,7 @@ namespace DDAppNative.Common
                     response.ContentLength64 = cacheState.ContentLength64;
 
                     // Copy the cache to the response
-                    await WriteToOutputStreamAsync(outputStreams, cache, cache.Position, CancellationToken.None).ConfigureAwait(false);
+                    await WriteToOutputStreamAsync(outputStreams, cache, cache.Position, cancellationToken).ConfigureAwait(false);
                 }
                 #endregion Loading Cache
 

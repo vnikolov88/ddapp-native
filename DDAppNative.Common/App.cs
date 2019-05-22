@@ -1,4 +1,4 @@
-﻿
+﻿using Plugin.Geolocator;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -54,38 +54,50 @@ namespace DDAppNative.Common
                 if (_webServer == null)
                 {
                     _webServerShutdownToken = new CancellationTokenSource();
-                    _webServer = new WebServer(DDAppLocalUrl);
+                    _webServer = new WebServer(new string[] { DDAppLocalUrl }, Unosquare.Labs.EmbedIO.Constants.RoutingStrategy.Regex, HttpListenerMode.Microsoft);
                     _webServer.OnGet( async (IHttpContext context, CancellationToken ct) => {
                         var url = context.Request.RawUrl;
                         if(url.StartsWith("/partial/ondevice/") || url.StartsWith("/ondevice/"))
                         {
-                            var _now = DateTime.Now;
-                            if (_nextOnDevicePopup > _now)
-                                return true;
-
                             try
                             {
                                 var deviceUrl = url.Substring(url.IndexOf("/ondevice/") + "/ondevice/".Length);
-                                if (deviceUrl.StartsWith("geo:")) deviceUrl = _nativeService.GetLocalGPSLink(deviceUrl);
-                                Device.BeginInvokeOnMainThread(() =>
+                                if (deviceUrl.StartsWith("location:current"))
                                 {
-                                    Device.OpenUri(new Uri(deviceUrl));
-                                });
+                                    var position = await CrossGeolocator.Current.GetPositionAsync(TimeSpan.FromSeconds(10));
+                                    return await context.StringResponseAsync($"{position.Latitude},{position.Longitude}", contentType: "text/plain", cancellationToken: ct);
+                                }
+                                else if (deviceUrl.StartsWith("location:last"))
+                                {
+                                    var position = await CrossGeolocator.Current.GetLastKnownLocationAsync();
+                                    return await context.StringResponseAsync($"{position.Latitude},{position.Longitude}", contentType: "text/plain", cancellationToken: ct);
+                                }
+                                else
+                                {
+                                    var _now = DateTime.Now;
+                                    if (_nextOnDevicePopup > _now)
+                                        return true;
 
-                                _nextOnDevicePopup = _now.AddMilliseconds(TimeFromLastPopupMs);
-                                Debug.Print($"Open ONDEVICE {url}");
-                                return true;
+                                    if (deviceUrl.StartsWith("geo:")) deviceUrl = _nativeService.GetLocalGPSLink(deviceUrl);
+                                    Device.BeginInvokeOnMainThread(() =>
+                                    {
+                                        Device.OpenUri(new Uri(deviceUrl));
+                                    });
+                                    _nextOnDevicePopup = _now.AddMilliseconds(TimeFromLastPopupMs);
+                                    Debug.Print($"Open ONDEVICE {url}");
+                                    return true;
+                                }
                             }
                             catch (Exception ex)
                             {
-                                return context.JsonExceptionResponse(ex);
+                                return await context.JsonExceptionResponseAsync(ex, cancellationToken: ct);
                             }
                         }
                         else
                         {
                             try
                             {
-                                await _cache.SendAndUpdateAsync(url, context.Response);
+                                await _cache.SendAndUpdateAsync(url, context.Response, cancellationToken: ct);
 
                                 Debug.Print($"PageLoad {url}");
                                 return true;
@@ -93,7 +105,7 @@ namespace DDAppNative.Common
                             catch (Exception ex)
                             {
                                 Debug.Print("PageLoad ERROR");
-                                return context.JsonExceptionResponse(ex);
+                                return await context.JsonExceptionResponseAsync(ex, cancellationToken: ct);
                             }
                         }
                     });
