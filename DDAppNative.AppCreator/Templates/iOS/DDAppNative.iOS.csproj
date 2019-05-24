@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>DDAppNative.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>DDAppNativeiOS</AssemblyName>
+    <AssemblyName>DDAppNative.iOS</AssemblyName>
     <NuGetPackageImportStamp>4580471d</NuGetPackageImportStamp>
     <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
   </PropertyGroup>
@@ -112,13 +112,9 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EmbedIO">
-      <Version>2.7.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xam.Plugin.Geolocator">
-      <Version>4.5.4-beta</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="3.0.0.482510" />
+    <PackageReference Include="EmbedIO" Version="2.7.3" />
+    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.6.0-beta" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.425677" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DDAppNative.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
