@@ -126,9 +126,9 @@ namespace DDAppNative.Common
                     _webServerShutdownToken.Cancel();
 
                     _webServerTask.Wait();
-                    _webServerShutdownToken.Dispose();
-                    _webServer.Listener.Stop();
-                    _webServer.Dispose();
+                    //_webServerShutdownToken.Dispose();
+                    //_webServer.Listener.Stop();
+                    //_webServer.Dispose();
                     _webServer = null;
 
                     Debug.Print("SERVER KILLED !!!");
