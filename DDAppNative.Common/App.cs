@@ -1,6 +1,7 @@
 ﻿using Plugin.Geolocator;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Unosquare.Labs.EmbedIO;
@@ -10,6 +11,7 @@ namespace DDAppNative.Common
 {
     public class App : Application // superclass new in 1.3
     {
+        private CultureInfo _defaultCulture = CultureInfo.InvariantCulture;
         private const string DDAppLocalUrl = "http://127.0.0.1:9696/";
         private WebServer _webServer;
         private Task _webServerTask;
@@ -65,12 +67,12 @@ namespace DDAppNative.Common
                                 if (deviceUrl.StartsWith("location:current"))
                                 {
                                     var position = await CrossGeolocator.Current.GetPositionAsync(TimeSpan.FromSeconds(10));
-                                    return await context.StringResponseAsync($"{position.Latitude},{position.Longitude}", contentType: "text/plain", cancellationToken: ct);
+                                    return await context.StringResponseAsync($"{position.Latitude.ToString(_defaultCulture)},{position.Longitude.ToString(_defaultCulture)}", contentType: "text/plain", cancellationToken: ct);
                                 }
                                 else if (deviceUrl.StartsWith("location:last"))
                                 {
                                     var position = await CrossGeolocator.Current.GetLastKnownLocationAsync();
-                                    return await context.StringResponseAsync($"{position.Latitude},{position.Longitude}", contentType: "text/plain", cancellationToken: ct);
+                                    return await context.StringResponseAsync($"{position.Latitude.ToString(_defaultCulture)},{position.Longitude.ToString(_defaultCulture)}", contentType: "text/plain", cancellationToken: ct);
                                 }
                                 else
                                 {
