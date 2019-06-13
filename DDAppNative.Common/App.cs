@@ -41,10 +41,9 @@ namespace DDAppNative.Common
             StartWebProxy();
             _nativeService = DependencyService.Get<INative>();
             var cacheBaseDir = _nativeService.GetCacheDir();
-            var preCacheBaseDir = _nativeService.GetPreCacheDir();
             _cache = new ApplicationCache(appHostBaseAddress, cacheBaseDir);
 
-            _cache.LoadPreCache(preCacheBaseDir);
+            _nativeService.LoadPreCache();
 
             MainPage = new WebPage($"{DDAppLocalUrl}{appCode}/Page1");
         }

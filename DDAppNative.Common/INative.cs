@@ -3,7 +3,7 @@
     public interface INative
     {
         string GetCacheDir();
-        string GetPreCacheDir();
+        void LoadPreCache();
         string GetLocalGPSLink(string gpsIntent);
     }
 }
