@@ -30,23 +30,6 @@ namespace DDAppNative.Common
             };
         }
 
-        public void LoadPreCache(string preCacheDir)
-        {
-            var preCachedFiles = new DirectoryInfo(preCacheDir).GetFiles($"Caches*");
-            foreach (var file in preCachedFiles)
-            {
-                var newDest = $"{baseDir}/{file.Name}";
-                if (File.Exists(newDest)) continue;
-                file.CopyTo(newDest);
-                //using (var readStream = file.OpenRead()) {
-                //    using (var writeStream = File.OpenWrite(newDest))
-                //    {
-                //        WriteToOutputStreamAsync(new Stream[] { writeStream }, readStream, 0, CancellationToken.None).GetAwaiter().GetResult();
-                //    }
-                //}
-            }
-        }
-
         public async Task SendAndUpdateAsync(string url, IHttpResponse response, CancellationToken cancellationToken)
         {
             var fileName = $"Caches{url.GetGUID()}";

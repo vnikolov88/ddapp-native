@@ -17,9 +17,15 @@ namespace DDAppNative.iOS
             return Path.Combine(documents, "..", "Library");
         }
 
-        public string GetPreCacheDir()
+        public void LoadPreCache()
         {
-            return NSBundle.MainBundle.BundlePath;
+            var preCachedFiles = new DirectoryInfo(NSBundle.MainBundle.BundlePath).GetFiles($"Caches*");
+            foreach (var file in preCachedFiles)
+            {
+                var newDest = $"{GetCacheDir()}/{file.Name}";
+                if (File.Exists(newDest)) continue;
+                file.CopyTo(newDest);
+            }
         }
 
         public string GetLocalGPSLink(string gpsIntent)

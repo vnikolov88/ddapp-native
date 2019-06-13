@@ -22,7 +22,7 @@ namespace DDAppNative.AppCreator.Builders
                 { "{{BUILD_NUMBER}}", state.BuildNumber },
                 { "{{APP_VERSION}}", state.AppVersion },
                 { "{{BUNDLE_IDENTIFIER}}", state.BundleIdentifier },
-                //{ "{{CACHES}}", state.Caches.Aggregate(new StringBuilder(), (curr, next) => curr.Append($"\r\n    <BundleResource Include=\"Resources\\{next}\" />")).ToString() }
+                { "{{CACHES}}", state.Caches.Aggregate(new StringBuilder(), (curr, next) => curr.Append($"\r\n    <AndroidAsset Include=\"Resources\\{next}\" />")).ToString() }
             };
 
             var appBaseDir = $"./{state.AppCode}";
