@@ -1,0 +1,6 @@
+{
+	"AppVersion": "1.0",
+	"BundleIdentifier": "com.jeute.doctorhelp.ddapp.aps",
+	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
+	"AppDisplayName": "aps"
+}
