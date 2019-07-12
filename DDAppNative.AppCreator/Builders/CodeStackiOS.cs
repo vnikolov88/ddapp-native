@@ -22,6 +22,7 @@ namespace DDAppNative.AppCreator.Builders
                 { "{{BUILD_NUMBER}}", state.BuildNumber },
                 { "{{APP_VERSION}}", state.AppVersion },
                 { "{{BUNDLE_IDENTIFIER}}", state.BundleIdentifier },
+                { "{{ONE_SIGNAL_IDENTIFIER}}", state.OneSignalIdentifier },
                 { "{{CACHES}}", state.Caches.Aggregate(new StringBuilder(), (curr, next) => curr.Append($"\r\n    <BundleResource Include=\"Resources\\{next}\" />")).ToString() }
             };
 

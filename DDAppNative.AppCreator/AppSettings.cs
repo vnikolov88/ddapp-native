@@ -14,6 +14,7 @@ namespace DDAppNative.AppCreator
 
         public string AppVersion { get; set; }
         public string BundleIdentifier { get; set; }
+        public string OneSignalIdentifier { get; set; }
         public string AppHostBaseUrl { get; set; }
         public string AppDisplayName { get; set; }
     }

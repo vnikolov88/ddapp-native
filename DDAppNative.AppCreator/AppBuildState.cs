@@ -12,6 +12,7 @@ namespace DDAppNative.AppCreator
         public string BuildNumber { get; set; }
         public string AppVersion { get; set; }
         public string BundleIdentifier { get; set; }
+        public string OneSignalIdentifier { get; set; }
         public IEnumerable<string> Caches { get; set; }
     }
 }

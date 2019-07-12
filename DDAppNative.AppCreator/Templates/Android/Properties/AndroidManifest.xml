@@ -1,7 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="{{BUILD_NUMBER}}" android:versionName="{{APP_VERSION}}.{{BUILD_NUMBER}}" package="{{BUNDLE_IDENTIFIER}}" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="27" />
-	<application android:label="{{DISPLAY_NAME}}" android:icon="@drawable/icon"></application>
+	<application android:label="{{DISPLAY_NAME}}" android:icon="@drawable/icon">
+		<receiver android:name="com.onesignal.GcmBroadcastReceiver"
+				android:permission="com.google.android.c2dm.permission.SEND" >
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
+				<category android:name="{{BUNDLE_IDENTIFIER}}" />
+			</intent-filter>
+		</receiver>
+	</application>
+	<permission android:name="{{BUNDLE_IDENTIFIER}}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="{{BUNDLE_IDENTIFIER}}.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

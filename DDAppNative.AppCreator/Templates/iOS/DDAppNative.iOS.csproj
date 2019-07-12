@@ -113,6 +113,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EmbedIO" Version="2.7.3" />
+    <PackageReference Include="Com.OneSignal" Version="3.3.0" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.6.0-beta" />
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.425677" />
   </ItemGroup>

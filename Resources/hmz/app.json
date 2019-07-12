@@ -1,0 +1,6 @@
+{
+	"AppVersion": "1.0",
+	"BundleIdentifier": "com.jeute.doctorhelp.ddapp.hmz",
+	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
+	"AppDisplayName": "Hausarztpraxis im med-Z"
+}

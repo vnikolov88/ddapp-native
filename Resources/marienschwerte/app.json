@@ -1,6 +1,7 @@
 {
 	"AppVersion": "2.0",
 	"BundleIdentifier": "com.jeute.schwerte",
+	"OneSignalIdentifier": "e5b709a8-5d0d-4071-a463-800708add29d",
 	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
 	"AppDisplayName": "Marien-SOS"
 }
