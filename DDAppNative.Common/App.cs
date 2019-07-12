@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Unosquare.Labs.EmbedIO;
 using Xamarin.Forms;
+using Com.OneSignal;
 
 namespace DDAppNative.Common
 {
@@ -25,18 +26,29 @@ namespace DDAppNative.Common
         public class WebPage : ContentPage
         {
             private readonly string _startUrl;
+            private WebView _browser;
 
             public WebPage(string startUrl)
             {
                 _startUrl = startUrl ?? throw new ArgumentNullException(nameof(startUrl));
                 
-                var browser = new WebView();
-                browser.Source = _startUrl;
-                Content = browser;
+                _browser = new WebView();
+                _browser.Source = _startUrl;
+                Content = _browser;
+            }
+
+            protected override bool OnBackButtonPressed()
+            {
+                _browser.GoBack();
+
+                return true;
             }
         }
 
-        public App(string appCode, string appHostBaseAddress)
+        public App(
+            string appCode,
+            string appHostBaseAddress,
+            string oneSignalIdentifier)
         {
             StartWebProxy();
             _nativeService = DependencyService.Get<INative>();
@@ -46,6 +58,12 @@ namespace DDAppNative.Common
             _nativeService.LoadPreCache();
 
             MainPage = new WebPage($"{DDAppLocalUrl}{appCode}/Page1");
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                OneSignal.Current.StartInit(oneSignalIdentifier).EndInit();
+            });
         }
 
         private void StartWebProxy()

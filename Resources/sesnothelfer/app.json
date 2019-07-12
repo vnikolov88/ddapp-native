@@ -1,6 +1,7 @@
 {
 	"AppVersion": "2.0",
 	"BundleIdentifier": "com.jeute.oldernburger.munsterland",
+	"OneSignalIdentifier": "4056a2ea-5ad6-4d54-ac06-261e2610df4c",
 	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
 	"AppDisplayName": "SES Nothelfer"
 }

@@ -6,7 +6,7 @@ using Plugin.CurrentActivity;
 
 namespace DDAppNative.Android
 {
-    [Activity (Label = "DoctorHelpMobile.Android.Android", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, 
+    [Activity (Label = "{{DISPLAY_NAME}}", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait,
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 	public class MainActivity : 
@@ -18,7 +18,7 @@ namespace DDAppNative.Android
 			CrossCurrentActivity.Current.Init(this, bundle);
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
-			LoadApplication (new App ("{{APP_CODE}}", "{{SERVICE_HOST}}")); // method is new in 1.3
+			LoadApplication (new App ("{{APP_CODE}}", "{{SERVICE_HOST}}", "{{ONE_SIGNAL_IDENTIFIER}}")); // method is new in 1.3
 		}
 		
 		public override void OnRequestPermissionsResult(int requestCode, string[] permissions, global::Android.Content.PM.Permission[] grantResults)

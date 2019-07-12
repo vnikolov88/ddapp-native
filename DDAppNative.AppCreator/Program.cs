@@ -31,6 +31,7 @@ namespace DDAppNative.AppCreator
                 DisplayName = appSettings.AppDisplayName,
                 ServiceHost = appSettings.AppHostBaseUrl,
                 AppVersion = appSettings.AppVersion,
+                OneSignalIdentifier = appSettings.OneSignalIdentifier,
                 BundleIdentifier = appSettings.BundleIdentifier
             };
 
