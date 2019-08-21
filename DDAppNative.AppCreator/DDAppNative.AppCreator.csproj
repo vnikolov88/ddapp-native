@@ -16,6 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Templates\iOS\AssemblyInfo.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Templates\Android\Resources\drawable\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
