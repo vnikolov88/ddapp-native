@@ -1,6 +1,7 @@
 {
 	"AppVersion": "1.0",
 	"BundleIdentifier": "com.jeute.doctorhelp.ddapp.zzm",
+	"OneSignalIdentifier": "",
 	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
 	"AppDisplayName": "ZAHNZENTRUM MOERS"
 }

@@ -13,7 +13,7 @@ namespace DDAppNative.Common
     public class App : Application // superclass new in 1.3
     {
         private CultureInfo _defaultCulture = CultureInfo.InvariantCulture;
-        private const string DDAppLocalUrl = "http://127.0.0.1:9696/";
+        private string DDAppLocalUrl = $"http://127.0.0.1:{new Random().Next(9696, 9898)}/";
         private WebServer _webServer;
         private Task _webServerTask;
         private object _webServerLock = new object();
@@ -22,6 +22,27 @@ namespace DDAppNative.Common
         private const ulong TimeFromLastPopupMs = 1000;
         private static ApplicationCache _cache;
         private INative _nativeService;
+
+        public class LoadingPage : ContentPage
+        {
+            public LoadingPage()
+            {
+                var _layout = new StackLayout()
+                {
+                    VerticalOptions = LayoutOptions.Center,
+                    HeightRequest = 80,
+                };
+                _layout.Children.Add(new ActivityIndicator()
+                {
+                    IsVisible = true,
+                    IsRunning = true,
+                    HeightRequest = 80,
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand
+                });
+                Content = _layout;
+            }
+        }
 
         public class WebPage : ContentPage
         {
@@ -55,9 +76,16 @@ namespace DDAppNative.Common
             var cacheBaseDir = _nativeService.GetCacheDir();
             _cache = new ApplicationCache(appHostBaseAddress, cacheBaseDir);
 
-            _nativeService.LoadPreCache();
+            MainPage = new LoadingPage();
 
-            MainPage = new WebPage($"{DDAppLocalUrl}{appCode}/Page1");
+            Task.Run(() =>
+            {
+                _nativeService.LoadPreCache();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    MainPage = new WebPage($"{DDAppLocalUrl}{appCode}/Page1");
+                });
+            });
 
             Task.Run(async () =>
             {

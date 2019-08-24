@@ -1,6 +1,7 @@
 {
 	"AppVersion": "1.0",
 	"BundleIdentifier": "com.jeute.doctorhelp.ddapp.aps",
+	"OneSignalIdentifier": "",
 	"AppHostBaseUrl": "http://ddapp.doctor-help.com",
 	"AppDisplayName": "Arztpraxis Pascha"
 }

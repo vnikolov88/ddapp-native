@@ -43,6 +43,10 @@ namespace DDAppNative.AppCreator.Primers
                                                       );
 
                     var tempCahce = cacheList.ToList();
+                    for(var j = 0; j < resources.Count; ++j)
+                    {
+                        resources[j] = resources[j].Replace("&amp;", "&");
+                    }
                     // Full URL
                     tempCahce.AddRange(resources.Where(x => !x.Contains("ondevice")).Select(x => x.Replace("./", $"/{appCode}/")).Distinct());
                     // Partial Copy
