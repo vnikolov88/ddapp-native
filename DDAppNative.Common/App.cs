@@ -22,47 +22,57 @@ namespace DDAppNative.Common
         private const ulong TimeFromLastPopupMs = 1000;
         private static ApplicationCache _cache;
         private INative _nativeService;
+        private AppMainPage _appMainPage;
 
-        public class LoadingPage : ContentPage
+        public class AppMainPage : ContentPage
         {
-            public LoadingPage()
+            private readonly string _startUrl;
+            private WebView _browser;
+
+            public AppMainPage(string startUrl)
+            {
+                _startUrl = startUrl ?? throw new ArgumentNullException(nameof(startUrl));
+
+                ToLoadingState();
+            }
+
+            private void ToLoadingState()
             {
                 var _layout = new StackLayout()
                 {
                     VerticalOptions = LayoutOptions.Center,
-                    HeightRequest = 80,
+                    HeightRequest = 120,
                 };
                 _layout.Children.Add(new ActivityIndicator()
                 {
                     IsVisible = true,
                     IsRunning = true,
-                    HeightRequest = 80,
+                    HeightRequest = 120,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     HorizontalOptions = LayoutOptions.CenterAndExpand
                 });
                 Content = _layout;
             }
-        }
 
-        public class WebPage : ContentPage
-        {
-            private readonly string _startUrl;
-            private WebView _browser;
-
-            public WebPage(string startUrl)
+            public void ToWebState()
             {
-                _startUrl = startUrl ?? throw new ArgumentNullException(nameof(startUrl));
-                
-                _browser = new WebView();
-                _browser.Source = _startUrl;
+                _browser = new WebView()
+                {
+                    Source = _startUrl
+                };
                 Content = _browser;
             }
 
             protected override bool OnBackButtonPressed()
             {
-                _browser.GoBack();
+                if (_browser != null)
+                {
+                    _browser.GoBack();
 
-                return true;
+                    return true;
+                }
+                else
+                    return false;
             }
         }
 
@@ -71,26 +81,29 @@ namespace DDAppNative.Common
             string appHostBaseAddress,
             string oneSignalIdentifier)
         {
+            _appMainPage = new AppMainPage($"{DDAppLocalUrl}{appCode}/Page1");
+            MainPage = _appMainPage;
+
             StartWebProxy();
             _nativeService = DependencyService.Get<INative>();
             var cacheBaseDir = _nativeService.GetCacheDir();
             _cache = new ApplicationCache(appHostBaseAddress, cacheBaseDir);
 
-            MainPage = new LoadingPage();
-
-            Task.Run(() =>
-            {
-                _nativeService.LoadPreCache();
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    MainPage = new WebPage($"{DDAppLocalUrl}{appCode}/Page1");
-                });
-            });
-
             Task.Run(async () =>
             {
-                await Task.Delay(2000);
-                OneSignal.Current.StartInit(oneSignalIdentifier).EndInit();
+                _nativeService.LoadPreCache();
+                await Task.Delay(1000);
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    _appMainPage.ToWebState();
+
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(3000);
+                        OneSignal.Current.StartInit(oneSignalIdentifier).EndInit();
+                    });
+                });
             });
         }
 
