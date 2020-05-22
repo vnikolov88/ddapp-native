@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DDAppNative.AppCreator.Primers
 {
     interface IAppCrawler
     {
-        Task<string[]> GetAllUrlsAsync(string appCode);
+        Task<string[]> GetAllUrlsAsync(IEnumerable<string> ignoreUrls);
     }
 }

@@ -19,10 +19,12 @@ namespace DDAppNative.AppCreator.Builders
                 { "{{APP_CODE}}", state.AppCode },
                 { "{{DISPLAY_NAME}}", state.DisplayName },
                 { "{{SERVICE_HOST}}", state.ServiceHost },
+                { "{{SERVICE_INITIAL_URL}}", state.ServiceInitialUrl },
                 { "{{BUILD_NUMBER}}", state.BuildNumber },
                 { "{{APP_VERSION}}", state.AppVersion },
                 { "{{BUNDLE_IDENTIFIER}}", state.BundleIdentifier },
                 { "{{ONE_SIGNAL_IDENTIFIER}}", state.OneSignalIdentifier },
+                { "{{IGNORE_URLS}}", string.Join(',', state.IgnoreUrls.Select(x => $"\"{x}\"")) },
                 { "{{CACHES}}", state.Caches.Aggregate(new StringBuilder(), (curr, next) => curr.Append($"\r\n    <AndroidAsset Include=\"Resources\\{next}\" />")).ToString() }
             };
 
@@ -38,6 +40,7 @@ namespace DDAppNative.AppCreator.Builders
             var appBuildBaseDir = $"{appBaseDir}/{state.BuildNumber}";
 
             FileUtils.CopyFiles(_codeBaseDir, $"{appBuildBaseDir}/Android");
+            FileUtils.CopyFile("DDAppNative.Common.dll", $"{appBuildBaseDir}/Android/DDAppNative.Common.dll");
 
             return state;
         }

@@ -7,22 +7,24 @@ using System.Threading.Tasks;
 using Unosquare.Labs.EmbedIO;
 using Xamarin.Forms;
 using Com.OneSignal;
+using System.Collections.Generic;
 
 namespace DDAppNative.Common
 {
-    public class App : Application // superclass new in 1.3
+    public class App : Application
     {
         private CultureInfo _defaultCulture = CultureInfo.InvariantCulture;
-        private string DDAppLocalUrl = $"http://127.0.0.1:{new Random().Next(9696, 9898)}/";
+        private static string DDAppLocalUrl = $"http://127.0.0.1:{new Random().Next(9696, 9898)}";
         private WebServer _webServer;
         private Task _webServerTask;
         private object _webServerLock = new object();
         private CancellationTokenSource _webServerShutdownToken;
-        private DateTime _nextOnDevicePopup;
+        private static DateTime _nextOnDevicePopup;
         private const ulong TimeFromLastPopupMs = 1000;
-        private static ApplicationCache _cache;
-        private INative _nativeService;
-        private AppMainPage _appMainPage;
+        protected static ApplicationCache _cache;
+        protected static INative _nativeService;
+        protected ICollection<string> _ignoreUrls;
+        protected AppMainPage _appMainPage;
 
         public class AppMainPage : ContentPage
         {
@@ -60,7 +62,47 @@ namespace DDAppNative.Common
                 {
                     Source = _startUrl
                 };
+                _browser.Navigated += _browser_Navigated;
+                _browser.Navigating += _browser_Navigating;
+                
                 Content = _browser;
+            }
+
+            private void _browser_Navigated(object sender, WebNavigatedEventArgs e)
+            {
+                _browser.EvaluateJavaScriptAsync("window.open = function(open) { return function (url, name, features) { window.location.href = url; return window; }; } (window.open);");
+            }
+
+            private void _browser_Navigating(object sender, WebNavigatingEventArgs e)
+            {
+                if (Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.iOS)
+                {
+                    if (e.Url.StartsWith("geo:") ||
+                        e.Url.StartsWith("tel:") ||
+                        (new Uri(e.Url).IsAbsoluteUri && (
+                            !e.Url.StartsWith(_startUrl) &&
+                            !e.Url.StartsWith(DDAppLocalUrl) &&
+                            !e.Url.StartsWith("https://landbot.io") &&
+                            !e.Url.StartsWith("https://www.youtube") &&
+                            !e.Url.StartsWith("https://amsel.zabaria.de") &&
+                            !e.Url.StartsWith("https://daisho.firebaseapp.com")
+                        )) ||
+                        e.Url.EndsWith(".pdf"))
+                    {
+                        e.Cancel = true;
+                        var deviceUrl = e.Url;
+                        var _now = DateTime.Now;
+                        if (_nextOnDevicePopup > _now)
+                            return;
+
+                        if (deviceUrl.StartsWith("geo:")) deviceUrl = _nativeService.GetLocalGPSLink(deviceUrl);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Device.OpenUri(new Uri(deviceUrl));
+                        });
+                        _nextOnDevicePopup = _now.AddMilliseconds(TimeFromLastPopupMs);
+                    }
+                }
             }
 
             protected override bool OnBackButtonPressed()
@@ -77,17 +119,19 @@ namespace DDAppNative.Common
         }
 
         public App(
-            string appCode,
-            string appHostBaseAddress,
-            string oneSignalIdentifier)
+            string appHostBaseUrl,
+            string appHostInitialUrl,
+            string oneSignalIdentifier,
+            ICollection<string> ignoreUrls)
         {
-            _appMainPage = new AppMainPage($"{DDAppLocalUrl}{appCode}/Page1");
+            _ignoreUrls = ignoreUrls ?? new List<string>();
+            _appMainPage = new AppMainPage($"{DDAppLocalUrl}{appHostInitialUrl}");
             MainPage = _appMainPage;
 
             StartWebProxy();
             _nativeService = DependencyService.Get<INative>();
             var cacheBaseDir = _nativeService.GetCacheDir();
-            _cache = new ApplicationCache(appHostBaseAddress, cacheBaseDir);
+            _cache = new ApplicationCache(appHostBaseUrl, cacheBaseDir);
 
             Task.Run(async () =>
             {
@@ -98,11 +142,14 @@ namespace DDAppNative.Common
                 {
                     _appMainPage.ToWebState();
 
-                    Task.Run(async () =>
+                    if (!string.IsNullOrWhiteSpace(oneSignalIdentifier))
                     {
-                        await Task.Delay(3000);
-                        OneSignal.Current.StartInit(oneSignalIdentifier).EndInit();
-                    });
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(3000);
+                            OneSignal.Current.StartInit(oneSignalIdentifier).EndInit();
+                        });
+                    }
                 });
             });
         }
@@ -117,7 +164,7 @@ namespace DDAppNative.Common
                     _webServer = new WebServer(new string[] { DDAppLocalUrl }, Unosquare.Labs.EmbedIO.Constants.RoutingStrategy.Regex, HttpListenerMode.Microsoft);
                     _webServer.OnGet( async (IHttpContext context, CancellationToken ct) => {
                         var url = context.Request.RawUrl;
-                        if(url.StartsWith("/partial/ondevice/") || url.StartsWith("/ondevice/"))
+                        if(url.StartsWith("/partial/ondevice/") || url.StartsWith("/ondevice/") || url.StartsWith("geo:") || url.StartsWith("tel:"))
                         {
                             try
                             {
@@ -186,6 +233,7 @@ namespace DDAppNative.Common
                     _webServerShutdownToken.Cancel();
 
                     _webServerTask.Wait();
+#warning EmbedIO update breaks this kind of flow
                     //_webServerShutdownToken.Dispose();
                     //_webServer.Listener.Stop();
                     //_webServer.Dispose();

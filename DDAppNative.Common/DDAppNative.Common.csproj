@@ -13,7 +13,7 @@
     <PackageReference Include="Com.OneSignal" Version="3.3.0" />
     <PackageReference Include="EmbedIO" Version="2.7.3" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.425677" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />
   </ItemGroup>
 
 </Project>

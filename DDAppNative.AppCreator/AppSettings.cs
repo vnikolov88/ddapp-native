@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DDAppNative.AppCreator
@@ -16,6 +17,8 @@ namespace DDAppNative.AppCreator
         public string BundleIdentifier { get; set; }
         public string OneSignalIdentifier { get; set; }
         public string AppHostBaseUrl { get; set; }
+        public string AppHostInitialUrl { get; set; }
         public string AppDisplayName { get; set; }
+        public IEnumerable<string> IgnoreUrls { get; set; }
     }
 }

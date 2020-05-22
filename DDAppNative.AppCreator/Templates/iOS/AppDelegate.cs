@@ -11,8 +11,10 @@ namespace DDAppNative.iOS
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init ();
-			LoadApplication (new App ("{{APP_CODE}}", "{{SERVICE_HOST}}", "{{ONE_SIGNAL_IDENTIFIER}}"));  // method is new in 1.3
-            app.StatusBarHidden = true;
+			LoadApplication(new App("{{SERVICE_HOST}}", "{{SERVICE_INITIAL_URL}}", "{{ONE_SIGNAL_IDENTIFIER}}", new string[] {
+				{{IGNORE_URLS}}
+			}));
+			app.StatusBarHidden = true;
 
             return base.FinishedLaunching (app, options);
 		}

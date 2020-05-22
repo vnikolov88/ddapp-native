@@ -1,5 +1,6 @@
 ﻿using DDAppNative.AppCreator.Builders;
 using DDAppNative.AppCreator.Primers;
+using DDAppNative.Common;
 using System;
 using System.IO;
 using System.Linq;
@@ -30,9 +31,11 @@ namespace DDAppNative.AppCreator
                 AppCode = appCode,
                 DisplayName = appSettings.AppDisplayName,
                 ServiceHost = appSettings.AppHostBaseUrl,
+                ServiceInitialUrl = appSettings.AppHostInitialUrl ?? appSettings.AppHostBaseUrl,
                 AppVersion = appSettings.AppVersion,
                 OneSignalIdentifier = appSettings.OneSignalIdentifier,
-                BundleIdentifier = appSettings.BundleIdentifier
+                BundleIdentifier = appSettings.BundleIdentifier,
+                IgnoreUrls = appSettings.IgnoreUrls
             };
 
             #region Get build number
@@ -67,7 +70,7 @@ namespace DDAppNative.AppCreator
             _cacheBuilder = new LocalCacheBuilder(baseUri);
 
             Console.WriteLine("Get all remote URL's");
-            var cacheList = _appCrawler.GetAllUrlsAsync(appCode).GetAwaiter().GetResult();
+            var cacheList = _appCrawler.GetAllUrlsAsync(appSettings.IgnoreUrls).GetAwaiter().GetResult();
             
             Console.WriteLine("Build local cache");
             appBuildState = _cacheBuilder.BuildLocalCacheAsync(appBuildState, cacheList).GetAwaiter().GetResult();

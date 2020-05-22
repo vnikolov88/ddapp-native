@@ -1,0 +1,11 @@
+{
+  "AppVersion": "1.0",
+  "BundleIdentifier": "com.techstorm.ddapp.chitzo",
+  "OneSignalIdentifier": "",
+  "AppHostBaseUrl": "https://www.chitzo.com/",
+  "AppHostInitialUrl": "https://www.chitzo.com/",
+  "AppDisplayName": "Chitzo",
+  "IgnoreUrls": [
+    ""
+  ]
+}

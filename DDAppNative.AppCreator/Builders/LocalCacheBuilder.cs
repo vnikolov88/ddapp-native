@@ -26,12 +26,12 @@ namespace DDAppNative.AppCreator.Builders
             var unsucessfullCaches = new List<string>();
             foreach (var cacheUrl in cacheList)
             {
-                var url = new Uri(_appHostBase, $"{cacheUrl}").ToString();
-                var fileName = $"Caches{cacheUrl.GetGUID()}";
-                var filePath = $"{appBaseDir}/{fileName}";
-
                 try
                 {
+                    var url = new Uri(_appHostBase, $"{cacheUrl}").ToString();
+                    var fileName = $"Caches{cacheUrl.GetGUID()}";
+                    var filePath = $"{appBaseDir}/{fileName}";
+
                     Console.WriteLine($"{fileName} <== {cacheUrl}");
                     var remoteCache = await applicationCache.CheckRemoteCacheAsync(url, string.Empty).ConfigureAwait(false);
                     if (remoteCache != null)
@@ -48,7 +48,7 @@ namespace DDAppNative.AppCreator.Builders
                 }
                 catch
                 {
-                    unsucessfullCaches.Add(url);
+                    unsucessfullCaches.Add(cacheUrl);
                 }
             }
 

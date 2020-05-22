@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DDAppNative.AppCreator.Primers
@@ -13,9 +15,11 @@ namespace DDAppNative.AppCreator.Primers
             _appHostBase = appHostBase ?? throw new ArgumentNullException(nameof(appHostBase));
         }
 
-        public async Task<string[]> GetAllUrlsAsync(string appCode)
+        public async Task<string[]> GetAllUrlsAsync(IEnumerable<string> ignoreUrls)
         {
-            var cacheList = new[] { $"/{appCode}/Page1" };
+            var cacheList = new[] { 
+                "/"
+            };
 
             for (var i = 0; i < cacheList.Length; ++i)
             {
@@ -42,16 +46,15 @@ namespace DDAppNative.AppCreator.Primers
                                                       .Where(u => !string.IsNullOrEmpty(u)).ToList()
                                                       );
 
-                    var tempCahce = cacheList.ToList();
                     for(var j = 0; j < resources.Count; ++j)
                     {
                         resources[j] = resources[j].Replace("&amp;", "&");
                     }
                     // Full URL
-                    tempCahce.AddRange(resources.Where(x => !x.Contains("ondevice")).Select(x => x.Replace("./", $"/{appCode}/")).Distinct());
+                    //tempCahce.AddRange(resources.Where(x => !x.Contains("ondevice")).Select(x => x.Replace("./", $"/{appCode}/")).Distinct());
                     // Partial Copy
-                    tempCahce.AddRange(resources.Where(x => !x.Contains("ondevice") && !x.StartsWith('.') && !x.StartsWith('/') && !x.StartsWith("http")).Distinct().Select(x => $"/partial/{appCode}/{x}").ToList());
-                    cacheList = tempCahce.Distinct().ToArray();
+                    //tempCahce.AddRange(resources.Where(x => !x.Contains("ondevice") && !x.StartsWith('.') && !x.StartsWith('/') && !x.StartsWith("http")).Distinct().Select(x => $"/partial/{appCode}/{x}").ToList());
+                    cacheList = resources.Where(x => !ignoreUrls.Any(url => Regex.IsMatch(url, x))).Distinct().ToArray();
 
                 }
                 catch (Exception ex)

@@ -2,6 +2,14 @@
   "AppVersion": "1.0",
   "BundleIdentifier": "com.jeute.doctorhelp.ddapp.mmb",
   "OneSignalIdentifier": "",
-  "AppHostBaseUrl": "http://ddapp.doctor-help.com",
-  "AppDisplayName": "EVK Mettmann Mein Baby"
+  "AppHostBaseUrl": "https://mettmannapp.zabaria.de",
+  "AppHostInitialUrl": "/",
+  "AppDisplayName": "EVK Mettmann Mein Baby",
+  "IgnoreUrls": [
+    "https://landbot.io*",
+    "https://www.youtube*",
+    "https://amsel.zabaria.de*",
+    "https://daisho.firebaseapp.com*",
+    "*.pdf"
+  ]
 }
