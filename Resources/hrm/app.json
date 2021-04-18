@@ -1,0 +1,11 @@
+{
+  "AppVersion": "1.0",
+  "BundleIdentifier": "com.techstorm.hrm",
+  "OneSignalIdentifier": "",
+  "AppHostBaseUrl": "https://www.healthcare-rm.com",
+  "AppHostInitialUrl": "/covid-questionnaire/",
+  "AppDisplayName": "COVID-19 Health Risk Assessment",
+  "IgnoreUrls": [
+    ""
+  ]
+}

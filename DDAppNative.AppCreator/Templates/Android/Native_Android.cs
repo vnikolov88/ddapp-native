@@ -1,4 +1,5 @@
-﻿using DDAppNative.Android;
+﻿using Android.Webkit;
+using DDAppNative.Android;
 using DDAppNative.Common;
 using System;
 using System.IO;
@@ -39,6 +40,17 @@ namespace DDAppNative.Android
         public string GetLocalGPSLink(string gpsIntent)
         {
             return gpsIntent;
+        }
+
+        public void SetupCookies(Xamarin.Forms.WebView webView)
+        {
+            CookieManager.Instance.Flush();
+            CookieManager.AllowFileSchemeCookies();
+            CookieManager.SetAcceptFileSchemeCookies(true);
+            CookieManager.Instance.AcceptCookie();
+            //CookieManager.Instance.AcceptThirdPartyCookies(webView);
+            CookieManager.Instance.SetAcceptCookie(true);
+            //CookieManager.Instance.SetAcceptThirdPartyCookies(webView, true);
         }
     }
 }
